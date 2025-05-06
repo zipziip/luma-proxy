@@ -28,8 +28,6 @@ app.post("/generate", async (req, res) => {
           }
         },
         aspect_ratio: "16:9",
-        quality: "low",
-        duration: 5,
         loop: false
       })
     });
