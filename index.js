@@ -27,8 +27,10 @@ app.post("/generate", async (req, res) => {
             url: imageUrl
           }
         },
-        aspect_ratio: "16:9",
-        loop: false
+  aspect_ratio: "16:9",
+  loop: false,
+  quality: "low",
+  duration: 9
       })
     });
 
