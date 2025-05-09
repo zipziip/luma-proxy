@@ -20,7 +20,7 @@ app.post("/generate", async (req, res) => {
         "Authorization": `Bearer ${LUMA_API_KEY}`
       },
       body: JSON.stringify({
-        prompt: "if image is indoor,gimbal and drone operated video.if image is outdoor,flying drone operated 360 views. if there is people in image, remove them.",
+        prompt: "gimbal and drone operated video",
         keyframes: {
           frame0: {
             type: "image",
