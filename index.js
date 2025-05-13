@@ -21,7 +21,7 @@ app.post("/generate", async (req, res) => {
         "Authorization": `Bearer ${LUMA_API_KEY}`
       },
       body: JSON.stringify({
-        model: "ray-flash-2", // ✅ 모델은 유지
+        model: "ray-2", // ✅ 모델은 유지
         prompt: "gimbal and drone 360 operated video",
         keyframes: {
           frame0: {
