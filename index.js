@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const LUMA_API_KEY = "luma-493eaa8a-4a0d-4d63-bbf3-2acad14a9c2b-15effffa-c881-4306-bdb2-69738962e09f"; // 반드시 본인 키로 바꾸세요
+const LUMA_API_KEY = "luma-493eaa8a-4a0d-4d63-bbf3-2acad14a9c2b-15effffa-c881-4306-bdb2-69738962e09f"; // 반드시 바꾸세요
 
 // POST /generate → 이미지 URL로 영상 생성 요청
 app.post("/generate", async (req, res) => {
@@ -21,7 +21,7 @@ app.post("/generate", async (req, res) => {
         "Authorization": `Bearer ${LUMA_API_KEY}`
       },
       body: JSON.stringify({
-        model: "ray-1-6",
+        model: "ray-1-6", // ✅ 요청한 모델
         prompt: "gimbal and drone operated video",
         keyframes: {
           frame0: {
@@ -30,7 +30,7 @@ app.post("/generate", async (req, res) => {
           }
         },
         quality: "low",
-        duration: 9,
+        duration: "5s", // ✅ 수정된 부분 (문자열로)
         aspect_ratio: "16:9",
         loop: false
       })
