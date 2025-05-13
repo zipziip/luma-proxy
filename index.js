@@ -6,9 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const LUMA_API_KEY = "luma-493eaa8a-4a0d-4d63-bbf3-2acad14a9c2b-15effffa-c881-4306-bdb2-69738962e09f";
+const LUMA_API_KEY = "luma-493eaa8a-4a0d-4d63-bbf3-2acad14a9c2b-15effffa-c881-4306-bdb2-69738962e09f"; // 반드시 본인 키로 바꾸세요
 
-// 1. 비디오 생성 요청
+// POST /generate → 이미지 URL로 영상 생성 요청
 app.post("/generate", async (req, res) => {
   const imageUrl = req.body.imageUrl;
   if (!imageUrl) return res.status(400).json({ error: "imageUrl is required" });
@@ -21,7 +21,7 @@ app.post("/generate", async (req, res) => {
         "Authorization": `Bearer ${LUMA_API_KEY}`
       },
       body: JSON.stringify({
-        model: "ray-2", // ✅ 최신 모델
+        model: "ray-1-6", // ✅ 요청한 모델 반영
         prompt: "gimbal and drone operated video",
         keyframes: {
           frame0: {
@@ -44,7 +44,7 @@ app.post("/generate", async (req, res) => {
   }
 });
 
-// 2. 비디오 상태 확인 요청
+// GET /status/:id → 생성된 비디오 상태 확인
 app.get("/status/:id", async (req, res) => {
   const id = req.params.id;
   if (!id) return res.status(400).json({ error: "Missing generation ID" });
@@ -63,5 +63,5 @@ app.get("/status/:id", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("✅ Luma Proxy is running on port 3000");
+  console.log("✅ Luma Proxy running on port 3000");
 });
