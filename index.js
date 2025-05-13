@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const LUMA_API_KEY = "여기에_당신의_Luma_API_KEY_입력"; // 실제 키로 교체하세요
+const LUMA_API_KEY = "luma-493eaa8a-4a0d-4d63-bbf3-2acad14a9c2b-15effffa-c881-4306-bdb2-69738962e09f"; // 실제 키로 교체하세요
 
 // POST /generate → 이미지 URL로 영상 생성 요청
 app.post("/generate", async (req, res) => {
