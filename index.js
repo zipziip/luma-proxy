@@ -22,7 +22,7 @@ app.post("/generate", async (req, res) => {
       },
       body: JSON.stringify({
         model: "rayflash-2", // ✅ 모델은 유지
-        prompt: "gimbal and drone operated video",
+        prompt: "gimbal and drone 360 operated video",
         keyframes: {
           frame0: {
             type: "image",
