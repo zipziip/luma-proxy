@@ -30,7 +30,7 @@ app.post("/generate", async (req, res) => {
           }
         },
         quality: "low",
-        duration: "5s", // ✅ 수정된 부분 (문자열로)
+        duration: "9s", // ✅ 수정된 부분 (문자열로)
         aspect_ratio: "16:9",
         loop: false
       })
