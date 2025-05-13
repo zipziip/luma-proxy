@@ -14,14 +14,14 @@ app.post("/generate", async (req, res) => {
   if (!imageUrl) return res.status(400).json({ error: "imageUrl is required" });
 
   try {
-    const response = await fetch("https://api.lumalabs.ai/v1/ray/generations", {
+    const response = await fetch("https://api.lumalabs.ai/dream-machine/v1/generations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${LUMA_API_KEY}`
       },
       body: JSON.stringify({
-        model: "ray-1-6", // ✅ 요청한 모델 반영
+        model: "ray-1-6",
         prompt: "gimbal and drone operated video",
         keyframes: {
           frame0: {
@@ -50,7 +50,7 @@ app.get("/status/:id", async (req, res) => {
   if (!id) return res.status(400).json({ error: "Missing generation ID" });
 
   try {
-    const response = await fetch(`https://api.lumalabs.ai/v1/ray/generations/${id}`, {
+    const response = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${id}`, {
       headers: { Authorization: `Bearer ${LUMA_API_KEY}` }
     });
 
