@@ -17,6 +17,7 @@ app.post("/generate", async (req, res) => {
       "Authorization": `Bearer ${LUMA_API_KEY}`
     },
     body: JSON.stringify({
+      model: "dream_machine",
       prompt: "gimbal and drone operated video",
       keyframes: {
         frame0: { type: "image", url: imageUrl }
