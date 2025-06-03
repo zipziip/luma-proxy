@@ -1,59 +1,57 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-const DATA_FILE = path.join(__dirname, 'visits.json');
 
 app.use(cors());
 app.use(express.json());
 
-// ✅ 로컬 JSON DB 로드
-function loadData() {
-  if (!fs.existsSync(DATA_FILE)) return {};
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-}
+let customers = {}; // 임시 저장
 
-// ✅ 저장
-function saveData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
+// ✅ 하루 1회 도장 적립 API
+app.post('/stamp-auto', (req, res) => {
+  const { businessId, userId } = req.body;
+  const key = `${businessId}_${userId}`;
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10); // YYYY-MM-DD
 
-// ✅ 하루 1회 스탬프 적립
-app.post('/stamp', (req, res) => {
-  const { userId, businessId } = req.body;
-  if (!userId || !businessId) return res.status(400).json({ error: 'Missing fields' });
-
-  const db = loadData();
-  const key = `${userId}_${businessId}`;
-  const today = new Date().toISOString().split('T')[0];
-
-  if (db[key] === today) {
-    return res.status(429).json({ message: 'Already stamped today' });
+  if (!customers[key]) {
+    customers[key] = { stampCount: 0, businessId, userId, lastStampedDate: "" };
   }
 
-  db[key] = today;
-  saveData(db);
+  if (customers[key].lastStampedDate === today) {
+    return res.status(200).json({
+      alreadyStamped: true,
+      stampCount: customers[key].stampCount
+    });
+  }
 
-  return res.json({ success: true, message: 'Stamp recorded' });
+  customers[key].stampCount++;
+  customers[key].lastStampedDate = today;
+
+  res.status(200).json({
+    alreadyStamped: false,
+    stampCount: customers[key].stampCount
+  });
 });
 
-// ✅ 적립 여부 확인
-app.get('/check', (req, res) => {
-  const { userId, businessId } = req.query;
-  if (!userId || !businessId) return res.status(400).json({ error: 'Missing fields' });
-
-  const db = loadData();
-  const key = `${userId}_${businessId}`;
-  const today = new Date().toISOString().split('T')[0];
-
-  const stamped = db[key] === today;
-  res.json({ stamped });
+// ✅ 도장 조회
+app.get('/stamp/:businessId/:userId', (req, res) => {
+  const key = `${req.params.businessId}_${req.params.userId}`;
+  res.json(customers[key] || { stampCount: 0 });
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ API running on port ${PORT}`);
+// ✅ 도장 수정
+app.patch('/stamp/:id', (req, res) => {
+  const id = req.params.id;
+  const delta = req.body.delta;
+  customers[id].stampCount = Math.max(0, (customers[id].stampCount || 0) + delta);
+  res.json(customers[id]);
 });
+
+// ✅ 도장 리셋
+app.delete('/stamp/:id', (req, res) => {
+  if (customers[id]) customers[id].stampCount = 0;
+  res.sendStatus(204);
+});
+
+app.listen(3000, () => console.log('🎯 Stamp API running'));
